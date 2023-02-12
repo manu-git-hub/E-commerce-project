@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+   {% if category %}
+        {{category.description|truncatewords:155}}
+   {% else %}
+        Welcome to Fish Martinez store where you can buy different items
+   {% endif %}
+{% endblock %}
+{% block title %}
+{% if category %}
+    {{category.name}}-Fish Martinez Store
+  {% else %}
+    See our New Collections Fish Martinez Store
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+<div>
+    <div class="row my_row_class">
+        <div class="my_auto">
+        <p><a href="{% url 'shop:allProductCat' %}">Our Product Collection</a></p>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="my_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+    <img class="my_image my_image_padding" src="{% static 'image/bannersale.gif' %}" alt="Our Product" width="1200px" height="400px">
+</div><br>
+<div>
+    <h1 class="text-center my_title">Our Product Collection</h1>
+    <p class="text-justify text-center">Fish Matinez - The online Aquarium fish and Aquarium Plants shopping app </p><p class="text-justify text-center">
+Fish Matinez deals with online aquarium fish and aquarium plants delivered all over India. We are now selling online only. We deliver aquatic plants and aquarium fishes in the following states in India, Andhra Pradesh, Bihar, Chhattisgarh, Goa, Gujarat, Haryana Himachal Pradesh, Jharkhand, Karnataka, Kerala, Assam, Madhya Pradesh, Maharashtra, Meghalaya, Mizoram, Odisha, Punjab, Rajasthan, Tamil Nadu, Telangana, Uttarakhand, Uttar Pradesh, West Bengal, Andaman and Nicobar Island, Chandigarh, Dadra Nagar Haveli, Daman and Diu, Delhi, Jammu Kashmir, Puducherry.</p>
+</div>
+    {% endif %}
+
+<div class="container">
+    <div class="row mx-auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width: 18rem; min-height:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}"> </a>
+                <div class="card-body" style="height:100px;">
+                     <h4>{{product.name}}</h4>
+                     <p>₹{{product.price}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
